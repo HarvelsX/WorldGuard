@@ -1014,7 +1014,6 @@ public class EventAbstractionListener extends AbstractListener {
 
         // Fire item interaction event
         Events.fireToCancel(event, new UseItemEvent(event, cause, world, potion.getItem()));
-
         // Fire entity interaction event
         if (!event.isCancelled()) {
             int blocked = 0;
@@ -1026,8 +1025,11 @@ public class EventAbstractionListener extends AbstractListener {
                         ? new DamageEntityEvent(event, cause, affected) :
                         new UseEntityEvent(event, cause, affected);
 
-                // Consider the potion splash flag
+                // Consider extra relevant flags
                 delegate.getRelevantFlags().add(Flags.POTION_SPLASH);
+                if (potion.getShooter() instanceof LivingEntity shooter && !(shooter instanceof Player) && affected instanceof Player) {
+                    delegate.getRelevantFlags().add(Flags.MOB_DAMAGE);
+                }
 
                 if (Events.fireAndTestCancel(delegate)) {
                     event.setIntensity(affected, 0);
