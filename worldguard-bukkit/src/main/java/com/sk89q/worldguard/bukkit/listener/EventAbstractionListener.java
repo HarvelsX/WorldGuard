@@ -1031,7 +1031,9 @@ public class EventAbstractionListener extends AbstractListener {
                 handleInventoryHolderUse(event, cause, sourceHolder);
             }
 
-            handleInventoryHolderUse(event, cause, targetHolder);
+            if (causeHolder != null && !causeHolder.equals(targetHolder)) {
+                handleInventoryHolderUse(event, cause, targetHolder);
+            }
 
             if (event.isCancelled() && causeHolder instanceof Hopper && wcfg.breakDeniedHoppers) {
                 getPlugin().getScheduler().executeAtRegion(((Hopper) causeHolder).getLocation(), () -> ((Hopper) causeHolder).getBlock().breakNaturally());
